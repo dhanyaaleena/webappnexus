@@ -17,18 +17,7 @@ pipeline{
 				}
 			}
 		}
-		stage ('QA with SonarQube') {
-			steps {
-				withSonarQubeEnv('sonar-8'){
-					sh 'mvn clean package sonar:sonar'
-				}
-			}
-		}
-		stage ('Upload War To nexus'){
-			steps{
-				sh 'mvn clean package'
-			}
-		}
+		
 	} 
 }
 		
