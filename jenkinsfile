@@ -17,7 +17,31 @@ pipeline{
 				}
 			}
 		}
-		
+		stage ('QA with SonarQube') {
+			steps {
+				withSonarQubeEnv('sonar-8'){
+					sh 'mvn clean package sonar:sonar'
+				}
+			}
+		}
+		stage ('Upload War To nexus'){
+			steps{
+				nexusArtifactUploader artifacts: [
+					[
+						artifactId: 'bootwebapp', classifier: '', 
+						file: 'target/bootwebapp-0.0.1-SNAPSHOT.war', 
+						type: 'war'
+						]
+					], 
+					credentialsId: '2b8777e5-fffe-4646-8d9d-a3ba550c4c6a', 
+					groupId: 'com.training', 
+					nexusUrl: '127.0.0.1:8081', 
+					nexusVersion: 'nexus3', 
+					protocol: 'http', 
+					repository: 'http://localhost:8081/repository/simpleapp-snapshot/', 
+					version: '0.0.1-SNAPSHOT'
+			}
+		}
 	} 
 }
 		
